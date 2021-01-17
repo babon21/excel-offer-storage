@@ -13,37 +13,13 @@ services:
     ports:
       - 5432:5432
 
-#  web:
-#    build: .
-#    container_name: offer-storage
-#    restart: on-failure
-#    ports:
-#      - 8080:8080
-#    depends_on:
-#      - postgres
-
-
-
-
-#        mysql:
-#          condition: service_healthy
-#      volumes:
-#        - ./config.json:/app/config.json
-
-  #  mysql:
-  #    image: mysql:5.7
-  #    container_name: go_clean_arch_mysql
-  #    command: mysqld --user=root
-  #    volumes:
-  #      - ./room.sql:/docker-entrypoint-initdb.d/init.sql
-  #    ports:
-  #      - 3306:3306
-  #    environment:
-  #      - MYSQL_DATABASE=room
-  #      - MYSQL_USER=user
-  #      - MYSQL_PASSWORD=password
-  #      - MYSQL_ROOT_PASSWORD=root
-  #    healthcheck:
-  #      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
-  #      timeout: 5s
-  #      retries: 10
+  web:
+    build: .
+    env_file:
+      - app.env
+    container_name: offer-storage
+    restart: on-failure
+    ports:
+      - 9090:9090
+    depends_on:
+      - postgres
