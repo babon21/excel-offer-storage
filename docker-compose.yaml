@@ -23,3 +23,12 @@ services:
       - 9090:9090
     depends_on:
       - postgres
+      - redis
+
+  redis:
+    image: redis
+    restart: on-failure
+    ports:
+      - 6379:6379
+    expose:
+      - 6379

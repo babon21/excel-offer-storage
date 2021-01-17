@@ -8,7 +8,9 @@ import (
 	"github.com/babon21/excel-offer-storage/internal/offer/gateway"
 	"github.com/babon21/excel-offer-storage/internal/offer/reader"
 	"github.com/babon21/excel-offer-storage/internal/offer/repository/postgres"
+	"github.com/babon21/excel-offer-storage/internal/offer/store"
 	"github.com/babon21/excel-offer-storage/internal/offer/usecase"
+	asyncUsecase "github.com/babon21/excel-offer-storage/internal/offer/usecase/async"
 	_ "github.com/jackc/pgx/v4/stdlib"
 	"github.com/jmoiron/sqlx"
 	"github.com/labstack/echo"
@@ -36,6 +38,12 @@ func main() {
 	offerRepo := postgres.NewPostgresOfferRepository(db)
 	gw := gateway.NewOfferGateway(".")
 	offerUseCase := usecase.NewOfferUseCase(offerRepo, gw, reader.NewExcelOfferReader())
-	offerHttp.NewOfferHandler(e, offerUseCase)
+	redisStore, err := store.NewRedisStore(conf.Cache.Host, conf.Cache.Port)
+	if err != nil {
+		log.Fatal().Err(err).Msg("Error while connecting to redis")
+	}
+
+	asyncUseCase := asyncUsecase.NewAsyncOfferUseCase(offerUseCase, redisStore)
+	offerHttp.NewOfferHandler(e, offerUseCase, asyncUseCase)
 	log.Fatal().Msg(e.Start(":" + conf.Server.Port).Error())
 }

@@ -5,6 +5,7 @@ go 1.15
 require (
 	github.com/360EntSecGroup-Skylar/excelize/v2 v2.3.2
 	github.com/bxcodec/faker/v3 v3.5.0
+	github.com/gomodule/redigo v1.8.3
 	github.com/jackc/pgx/v4 v4.10.1
 	github.com/jmoiron/sqlx v1.2.0
 	github.com/labstack/echo v3.3.10+incompatible

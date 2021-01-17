@@ -15,6 +15,10 @@ type Config struct {
 		Port     string
 		DbName   string
 	}
+	Cache struct {
+		Host string
+		Port string
+	}
 }
 
 func Init() Config {
@@ -23,11 +27,15 @@ func Init() Config {
 	viper.AutomaticEnv()
 
 	config.Server.Port = viper.GetString("SERVER_PORT")
+
 	config.Database.Username = viper.GetString("DATABASE_USER")
 	config.Database.Password = viper.GetString("DATABASE_PASSWORD")
 	config.Database.Host = viper.GetString("DATABASE_HOST")
 	config.Database.Port = viper.GetString("DATABASE_PORT")
 	config.Database.DbName = viper.GetString("DATABASE_NAME")
+
+	config.Cache.Host = viper.GetString("CACHE_HOST")
+	config.Cache.Port = viper.GetString("CACHE_PORT")
 
 	return config
 }
