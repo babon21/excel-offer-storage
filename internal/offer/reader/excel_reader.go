@@ -4,12 +4,17 @@ import (
 	"fmt"
 	"github.com/360EntSecGroup-Skylar/excelize/v2"
 	"github.com/babon21/excel-offer-storage/internal/offer/domain"
+	"github.com/babon21/excel-offer-storage/internal/offer/usecase"
 	"strconv"
 )
 
-//type excelOfferReader struct { }
+type excelOfferReader struct{}
 
-func ReadAll(filePath string) ([]domain.Offer, uint32, error) {
+func NewExcelOfferReader() usecase.OfferReader {
+	return &excelOfferReader{}
+}
+
+func (e *excelOfferReader) ReadAll(filePath string) ([]domain.Offer, uint32, error) {
 	f, err := excelize.OpenFile(filePath)
 	if err != nil {
 		fmt.Println(err)
@@ -101,26 +106,3 @@ func tryFillOffer(num int, value string, offer *domain.Offer) error {
 	}
 	return nil
 }
-
-//func fillOffer(num int, value string, offer *domain.Offer) {
-//	// TODO maybe in case use type with iota
-//	switch num {
-//	case 0:
-//		offer.OfferId = value
-//	case 1:
-//		offer.Name = value
-//	case 2:
-//		strconv.Atoi(value)
-//		offer.Price, _ = strconv.Atoi(value)
-//	case 3:
-//		offer.Quantity = value
-//	case 4:
-//		offer.Available = value
-//	default:
-//		fmt.Println("fillOffer error!")
-//	}
-//}
-
-//func NewExcelOfferReader() usecase.OfferReader {
-//	return &excelOfferReader{}
-//}

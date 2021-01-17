@@ -2,7 +2,6 @@ package usecase
 
 import (
 	"github.com/babon21/excel-offer-storage/internal/offer/domain"
-	"github.com/babon21/excel-offer-storage/internal/offer/reader"
 )
 
 type OfferUseCase interface {
@@ -12,9 +11,8 @@ type OfferUseCase interface {
 
 type offerUseCase struct {
 	offerRepository OfferRepository
-	//offerReader     OfferReader
-	offerGateway   OfferGateway
-	excelFilesPath string
+	offerGateway    OfferGateway
+	offerReader     OfferReader
 }
 
 func (useCase *offerUseCase) Store(sellerId string, url string) (Statistic, error) {
@@ -83,7 +81,11 @@ func createOfferMap(offers []domain.Offer) map[string]domain.Offer {
 }
 
 func (useCase *offerUseCase) GetList(sellerId string, offerId string, offerName string) ([]domain.Offer, error) {
-	return useCase.offerRepository.GetList(sellerId, offerId, offerName)
+	list, err := useCase.offerRepository.GetList(sellerId, offerId, offerName)
+	if err != nil {
+		return nil, err
+	}
+	return list, nil
 }
 
 func (useCase *offerUseCase) getOffers(sellerId string, offerPath string) ([]domain.Offer, uint32, error) {
@@ -93,7 +95,7 @@ func (useCase *offerUseCase) getOffers(sellerId string, offerPath string) ([]dom
 		return nil, 0, err
 	}
 
-	offers, errCount, err := reader.ReadAll(offerFilename)
+	offers, errCount, err := useCase.offerReader.ReadAll(offerFilename)
 	if err != nil {
 		return nil, errCount, err
 	}
@@ -105,11 +107,10 @@ func (useCase *offerUseCase) getOffers(sellerId string, offerPath string) ([]dom
 	return offers, errCount, nil
 }
 
-func NewOfferUseCase(offerRepository OfferRepository, offerGateway OfferGateway, excelFilesPath string) OfferUseCase {
+func NewOfferUseCase(offerRepository OfferRepository, offerGateway OfferGateway, offerReader OfferReader) OfferUseCase {
 	return &offerUseCase{
 		offerRepository: offerRepository,
-		//offerReader:     offerReader,
-		offerGateway:   offerGateway,
-		excelFilesPath: excelFilesPath,
+		offerGateway:    offerGateway,
+		offerReader:     offerReader,
 	}
 }

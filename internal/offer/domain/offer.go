@@ -1,10 +1,10 @@
 package domain
 
 type Offer struct {
-	SellerId  string `db:"seller_id"`
-	OfferId   string `db:"offer_id"`
-	Name      string
-	Price     int32
-	Quantity  int32
-	Available bool
+	SellerId  string `json:"seller_id" db:"seller_id"`
+	OfferId   string `json:"offer_id" db:"offer_id"`
+	Name      string `json:"name"`
+	Price     int32  `json:"price"`
+	Quantity  int32  `json:"quantity"`
+	Available bool   `json:"-"`
 }
