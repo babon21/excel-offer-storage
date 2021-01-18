@@ -22,20 +22,15 @@ func (useCase *offerUseCase) GetTask(taskId int64) string {
 }
 
 func (useCase *offerUseCase) Store(sellerId string, url string) (int64, error) {
-	id, err := useCase.taskStore.GetNewId("task_id")
-	if err != nil {
-		// TODO
-	}
+	id, _ := useCase.taskStore.GetNewId("task_id")
 
 	response := api.GetTaskResponse{
 		Status: "waiting",
 	}
 
-	jsonResponse, err := json.MarshalIndent(response, "", "    ")
+	jsonResponse, _ := json.MarshalIndent(response, "", "    ")
 
-	if err := useCase.taskStore.Set(id, string(jsonResponse)); err != nil {
-		// TODO
-	}
+	_ = useCase.taskStore.Set(id, string(jsonResponse))
 
 	go func() {
 		statistic, err := useCase.syncOfferUseCase.Store(sellerId, url)
@@ -54,9 +49,7 @@ func (useCase *offerUseCase) Store(sellerId string, url string) (int64, error) {
 
 		}
 
-		if err := useCase.taskStore.Set(id, string(jsonResponse)); err != nil {
-			// TODO ???
-		}
+		_ = useCase.taskStore.Set(id, string(jsonResponse))
 	}()
 
 	return id, nil
