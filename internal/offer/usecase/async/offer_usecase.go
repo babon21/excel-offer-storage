@@ -44,11 +44,7 @@ func (useCase *offerUseCase) Store(sellerId string, url string) (int64, error) {
 			Status:    status,
 			Statistic: statistic,
 		}
-		jsonResponse, err := json.MarshalIndent(response, "", "    ")
-		if err != nil {
-
-		}
-
+		jsonResponse, _ := json.MarshalIndent(response, "", "    ")
 		_ = useCase.taskStore.Set(id, string(jsonResponse))
 	}()
 

@@ -75,7 +75,7 @@ func (a *OfferHandler) AsyncDownloadOffers(c echo.Context) error {
 		return c.JSONPretty(http.StatusUnprocessableEntity, ResponseError{Message: err.Error()}, "  ")
 	}
 
-	taskId, err := a.AsyncOfferUsecase.Store(request.SellerId, request.Url)
+	taskId, _ := a.AsyncOfferUsecase.Store(request.SellerId, request.Url)
 
 	response := api.AsyncDownloadOffersResponse{TaskId: taskId}
 	return c.JSONPretty(http.StatusOK, response, "  ")
