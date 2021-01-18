@@ -88,7 +88,7 @@ curl --request POST 'localhost:9090/offers/async' \
 #### Пример запроса и ответа
 Запрос:
 ```
-curl --location --request GET 'localhost:9090/tasks/1'
+curl --request GET 'localhost:9090/tasks/1'
 ```
 Ответ:
 ```
