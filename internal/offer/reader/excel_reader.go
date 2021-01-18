@@ -55,8 +55,7 @@ OUTER:
 }
 
 func offerIsValid(offer *domain.Offer) bool {
-	// TODO need implement
-	return true
+	return offer.Price >= 0 && offer.Quantity >= 0
 }
 
 func offerIsEmpty(offer *domain.Offer) bool {
@@ -64,7 +63,6 @@ func offerIsEmpty(offer *domain.Offer) bool {
 }
 
 func tryFillOffer(num int, value string, offer *domain.Offer) error {
-	// TODO do full validation
 	switch num {
 	case 0:
 		offerId, err := strconv.ParseFloat(value, 32)
