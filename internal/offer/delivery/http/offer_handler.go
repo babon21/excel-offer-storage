@@ -100,29 +100,16 @@ func (a *OfferHandler) startDownloadOffersTask(ch chan string, sellerId string, 
 
 func (a *OfferHandler) GetTask(c echo.Context) error {
 	taskId := c.Param("id")
+
 	strTaskId, err := strconv.ParseInt(taskId, 10, 32)
 	if err != nil {
 		return c.JSONPretty(http.StatusBadRequest, nil, "  ")
 	}
-	task := a.AsyncOfferUsecase.GetTask(strTaskId)
-	return c.JSONPretty(http.StatusOK, task, "  ")
-}
 
-//func isRequestValid(request *api.AddBookingRequest) error {
-//	dateLayout := "2006-01-02"
-//
-//	_, err := time.Parse(dateLayout, request.StartDate)
-//	if err != nil {
-//		return errors.New("start_date field isn't valid, must be in year-month-day format")
-//	}
-//
-//	_, err = time.Parse(dateLayout, request.ExpirationDate)
-//	if err != nil {
-//		return errors.New("expiration_date field isn't valid, must be in year-month-day format")
-//	}
-//
-//	return nil
-//}
+	task := a.AsyncOfferUsecase.GetTask(strTaskId)
+	c.Response().Header().Set(echo.HeaderContentType, echo.MIMEApplicationJSONCharsetUTF8)
+	return c.String(http.StatusOK, task)
+}
 
 func getStatusCode(err error) int {
 	if err == nil {
@@ -131,10 +118,6 @@ func getStatusCode(err error) int {
 
 	log.Error().Msg(err.Error())
 	switch err {
-	//case domain.ErrInternalServerError:
-	//	return http.StatusInternalServerError
-	//case domain.ErrNotFound:
-	//	return http.StatusNotFound
 	default:
 		return http.StatusInternalServerError
 	}
