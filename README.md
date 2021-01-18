@@ -55,6 +55,54 @@ make test
 
 # API
 ## Асинхронный вариант
+### POST /offers/async
+**Асинхронная загрузка товаров в формате Excel.**
+Принимает на вход ссылку на файл и id продавца, к чьему аккаунту будут привязаны загружаемые товары. Сервис читает файл и сохраняет, либо обновляет товары в БД. Обновление будет происходить, если пара (id продавца, offer_id) уже есть у нас в базе. 
+
+```
+{
+    "seller_id": "string",
+    "url": "string"
+}
+```
+В ответ на запрос выдает ID задачи, которая будет выполнять данную загрузку.
+
+Запрос:
+```
+curl --request POST 'localhost:9090/offers/async' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "seller_id": "1",
+    "url": "https://docs.google.com/spreadsheets/d/1QmDcIfAfJprYG2ZPgmOoGRqbggw3rJ5b9yi3iW_oP-U/export?format=xlsx"
+}'
+```
+Ответ:
+```
+{
+  "task_id": 1
+}
+```
+
+### GET /tasks/:id
+**Получение задачи загрузки по taskId.**
+#### Пример запроса и ответа
+Запрос:
+```
+curl --location --request GET 'localhost:9090/tasks/1'
+```
+Ответ:
+```
+{
+    "status": "done",
+    "statistic": {
+        "created_count": 0,
+        "updated_count": 6,
+        "deleted_count": 7,
+        "err_count": 1
+    }
+}
+```
+
 ## Синхронный вариант
 ### POST /offers
 **Загрузка товаров в формате Excel.**
