@@ -58,11 +58,6 @@ func (a *OfferHandler) DownloadOffers(c echo.Context) (err error) {
 		return c.JSONPretty(http.StatusUnprocessableEntity, ResponseError{Message: err.Error()}, "  ")
 	}
 
-	// TODO url validation
-	//if err = isRequestValid(&request); err != nil {
-	//	return c.JSONPretty(http.StatusBadRequest, ResponseError{Message: err.Error()}, "  ")
-	//}
-
 	statistic, err := a.OfferUsecase.Store(request.SellerId, request.Url)
 	if err != nil {
 		return c.JSONPretty(getStatusCode(err), ResponseError{Message: err.Error()}, "  ")
@@ -84,18 +79,6 @@ func (a *OfferHandler) AsyncDownloadOffers(c echo.Context) error {
 
 	response := api.AsyncDownloadOffersResponse{TaskId: taskId}
 	return c.JSONPretty(http.StatusOK, response, "  ")
-}
-
-func (a *OfferHandler) startDownloadOffersTask(ch chan string, sellerId string, url string) {
-
-	// TODO get new store ID
-	// TODO write taskId to ch channel
-	statistic, err := a.OfferUsecase.Store(sellerId, url)
-	if err != nil {
-		// TODO put error to status store
-	}
-	_ = statistic
-	// TODO put statistic and status store to store
 }
 
 func (a *OfferHandler) GetTask(c echo.Context) error {
